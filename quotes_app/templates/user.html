@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <title>Welcome</title>
+</head>
+<body>
+    <div id='wrap'>
+        <div id='posts'>
+            <h1>{{ user.first_name }} {{ user.last_name}}'s Favorite Quotes!</h1>   
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container"> 
+                <a>My Favorite Quotes</a>
+                <span class="navbar-text">
+                <a href="/quotes" role="button" class="btn btn-sm btn-info ml-2 text-white">Home page</a>
+                <a href="/logout" role="button" class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+                </span>
+            </div>
+        </nav>
+        {% if messages %}
+        <ul class="alert alert-secondary" role="alert">
+            {% for message in messages %}
+            <li class="text-danger">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="one_post">
+        <div class='form-box'>
+        <h3>My Favorite Quotes:</h3></a>
+        <h3>Total of Quotes Posted: {{quote.uploaded_quotes.count}} </h3>
+        {% for quote in user.fav_quotes.all %}
+        <div class="one_post">
+            <h5>Message: {{quote.message}}</h5>
+            <h5 class='poster'>Quote Released: {{quote.created_at}}</h5>
+            <h5 class='poster'>Quote Updated: {{quote.updated_at}}</h5>
+            <a class="poster" href="/quotes/others/{{quote.uploaded_by.id}}"><p class='poster' >Uploaded by: {{quote.uploaded_by.first_name}} {{quote.uploaded_by.last_name}}</p>
+            <h5><a class='poster' href="/quotes/{{quote.id}}">Remove Favorite Book</a></h5>
+        </div>
+        {% endfor %}
+        </div>
+        </div>
+    </div>
+</body>
+</html>

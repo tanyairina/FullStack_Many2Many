@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <title>Favorite Quotes</title>
+</head>
+<body>
+    <div id='wrap'>
+        <div id='posts'>
+        <h3>Success! Welcome {{user.first_name}} {{user.last_name}}!</h3>
+            {% if messages %}
+        <div id='errors'>
+        <ul class="alert-danger" role="alert">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        </div>
+        {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container"> 
+            <a class="navbar-brand" href="/quotes/others/{{user.id}}">My Favorite Quotes!</a>
+            <span class="navbar-text">
+            <a href="quotes/user/{{user.id}}" role="button" class="btn btn-sm btn-info ml-2 text-white">User Profile</a>
+            <a href="quotes/others/{{user.id}}" role="button" class="btn btn-sm btn-info ml-2 text-white">Other Users</a>
+            <a href="logout" role="button" class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+        </span>
+        </div>
+    </nav>
+    <div class="one_post">
+    <div class='form-box'>
+        <h3>Contribute a Quote</h3>          
+        <form action="/create" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <h5>Quote:</h5>
+                <label for="message">Message:</label>
+                <input type="text" class="form-control" name="message">
+            </div>
+            <div class="form-group">
+                <label for="title">By: </label>
+                <input type="text" class="form-control" name="title">
+            </div>
+                <button type="submit" class="btn btn-primary">Add a Quote</button>
+            </form>
+    </div>
+    </div>
+    <div class="one_post">
+    <div class='form-box'>
+    <a href="/quotes/user/{{user.id}}"><h3>List of Favorite Quotes:</h3></a>
+    {% for quote in user.fav_quotes.all %}
+    <div class="one_post">
+        <a href="/quotes/{{quote.id}}"><h5>Message: {{quote.message}}</h5></a>
+        <p>Uploaded by: {{quote.uploaded_by.first_name}} {{quote.uploaded_by.last_name}}</p>
+        <h5><a class='poster' href="/quotes/edit/{{quote.id}}">Remove from Favorites</a></h5>
+    </div>
+    {% endfor %}
+    </div>
+    <div class="one_post">
+    <div class='form-box'>
+    <h3>All User's Quotes:</h3>
+    {% for quote in all_quotes %}
+    <div class="one_post">
+        <a href="/quotes/{{quote.id}}"></a>
+        <h5>Message: {{quote.message}}</h5>
+        <a class="poster" href="/quotes/others/{{quote.uploaded_by.id}}"><p>Uploaded by: {{quote.uploaded_by.first_name}} {{quote.uploaded_by.last_name}}</p>
+        <h5><a class='poster' href="/favorite/{{quote.id}}">Add to Favorites</a></h5>
+    </div>
+    {% endfor %}
+    </div>
+    </div>
+</div>
+</div>    
+</body>
+</html>
